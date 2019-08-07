@@ -63,111 +63,46 @@ create file push...
 git push origin master
 
 
-git remote vs git clone?
+git remote add vs git clone?
+
+git remote add just creates an entry in your git config that specifies a name for a particular URL. You must have an existing git repo to use this. 
+git clone creates a new git repository by copying an existing one located at the URI you specify.
 
 ------------------------------------------------------------------------------------------------------------------
 
-You need to commit at least one time on master before creating a new branch.
+July 11, 2019
+
+Jenkins and Git overview
+
+branch is a help you parell stream of developing.. branch is nothing but link to latest commit id..
+
+https://www.atlassian.com/git/tutorials/using-branches
+
+/root/soft/gittest/gitbranch
 
 
+Aut 07, 2019
+------------------------------------------------------------------
 
+touch f1 f2; git add f1 f2 
+git commit -m "3rd commit" f2
+git log -- show local repo commit ids
+git show commitid 40/7 characters -- show what modified in commit
 
+git log -2 --show latest 2 commit ids -n
+git log --oneline
+git log --oneline -2
+git log --author=authorname
+git log --since=yy-mm-dd
+git log --until=yy-mm-dd
+git log --oneline --decorate ; useful in multiple branches
 
+git reset --soft lastcommitid-1 (copy file from local repo to staging/index area)
+git reset HEAD filename (unstage)
+git reset --mixed lastcommitid-1 (copy file from local repo directly to workspace)
 
-
-
-
-
-
-
-
-
-------------------------------------------------------------------------------------------------------------------
-
-------------------------------------------------------------------------------------------------------------------
-
-------------------------------------------------------------------------------------------------------------------
-
-Yet to Discuss:
-
-
-https://github.com/
-
-git help config
-       When reading, the values are read from the system, global and repository local configuration files by default, and options
-       --system, --global, --local and --file <filename> can be used to tell the command to read from only that location (see the
-       section called “FILES”).
-
-cat ~/.gitconfig
-cat .git/config
-git config --list
-
-~/.gitconfig --global
-.git/config --local
-/etc/gitconfig --system
-git config --list  --file /tmp/fileconfig
-
-
-git config --global --edit
-git config --local --edit
-git config --system --edit 
-git config --edit  --file /tmp/fileconfig	
-
-git config --global user.email "sivaprasad.kammara@gmail.com"
-git config --global user.name "ksphub"
-
-git config --global --unset-all  user.name
-git config --global --unset-all  user.email
-git config --global --replace-all user.email "you@example.com"
-git config --global --replace-all user.name "Your Name"
-
-[root@ip-172-31-32-89 ksp4]# git config --local --list
-
-core.repositoryformatversion=0
-core.filemode=true
-core.bare=false
-core.logallrefupdates=true
-
-[root@ip-172-31-32-89 ksp4]# git config --global --list
-
-user.email=sivaprasad.kammara@gmail.com
-user.name=ksphub
-[root@ip-172-31-32-89 ksp4]# git config --system --list
-fatal: unable to read config file '/etc/gitconfig': No such file or directory
-
-[root@ip-172-31-32-89 ksp4]# git config --list
-
-user.email=sivaprasad.kammara@gmail.com
-user.name=ksphub
-core.repositoryformatversion=0
-core.filemode=true
-core.bare=false
-core.logallrefupdates=true
-
-[root@ip-172-31-32-89 ksp4]#
-
-git clone https://github.com/ksphub/centralrepo.git
-https://github.com/ksphub/centralrepo.git
-git push origin master
-
-git log --stat --summary
-git help tutorial
-git help add/status/config
-
-git remote -v
-git remote add origin https://github.com/ksphub/centralrepo.git
-git push -u origin master
-
-https://github.com/ksphub/KSPDocs.git
-
+commited files:
+ (use "git add/rm <file>..." to update what will be committed)
+ (use "git checkout -- <file>..." to discard changes in working directory)
 
 ------------------------------------------------------------------------------------------------------------------
-
-------------------------------------------------------------------------------------------------------------------
-
-------------------------------------------------------------------------------------------------------------------
-
-------------------------------------------------------------------------------------------------------------------
-
-------------------------------------------------------------------------------------------------------------------
-
