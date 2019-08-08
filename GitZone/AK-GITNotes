@@ -110,26 +110,84 @@ commited files:
 
 Aug 08, 2019
 
-list branch
+list branch:
 git branch 
 
-create branch
+create branch:
 git branch develop
 
-switch to branch
+switch to branch:
 git checkout develop
 
-create and switch
+create and switch:
 git checkout -b develop2
+
+rename branch:
+git branch -m  develop develop2
+
+replace branch:
+git branch -M test develop2
+
+
+delete branch:
+git branch -d hotfixes
+git branch -D hotfixes
 
 git log --decorate --oneline --graph
 
-to merge develop to master
+to merge develop to master (fast-farward - without conflicts;  developers updates a file on branch and no commits on master ):
+git checkout master
+git merge develop
+
+to merge develop to master (with conflicts - 2 developers update's same file; Automatic merge failed; fix conflicts and then commit the result. ):
+git checkout master
+git merge develop
+
+to merge develop to master (with conflicts - 2 developers update's updates different file ; Merge made by the 'recursive' strategy. ):
 git checkout master
 git merge develop
 
 
+create tag...
+git tag 0.1
+git tag --list / git tag
+git tag -d list
 
+
+edit and commit one shot for tracked files:
+echo master >> mfile ; git commit -am "updated by master"
+
+to edit comment:
+git commit --amend -m "updated comments"
+
+set command alias
+git config --global alias.lo "log --oneline"
+git config --global alias.lod "log --oneline --decorate"
+git config --list | grep -i alias
+git config --global --unset alias.lo
+
+
+create a empty branch
+
+git checkout --orphan hotfixes 
+( git status ; git branch ; check default branch not selected and git log
+fatal: bad default revision 'HEAD')
+Switched to a new branch 'hotfixes'
+
+git rm --cached *
+rm *
+
+for i in bugfix ; do  touch $i ; git add . ; git commit -m "added $i"; done
+git log --oneline ; git branch
+
+
+list only current branch:
+cat .git/HEAD
+git rev-parse --abbrev-ref HEAD
+
+create a file:
+for i in dfile5 ; do  touch $i ; git add . ; git commit -m "added $i"; done
+for i in dfile1 dfile2 dfile3 ; do  touch $i ; git add . ; git commit -m "added $i"; done
 
 ------------------------------------------------------------------------------------------------------------------
 git tasks:
@@ -273,8 +331,103 @@ https://github.com/ksphub/KSPDocs.git
 
 
 ------------------------------------------------------------------------------------------------------------------
+practice: https://nvie.com/posts/a-successful-git-branching-model/
+
+mkdir gmodel2 ; cd gmodel2
+
+git status; git init ; git status
+git branch ; git log
+touch masterfile ; git add masterfile ; git commit -m "added by master"
+git tag; git tag 0.1; git tag
+
+git checkout -b develop
+touch dfile1 ; git add dfile1 ; git commit -m "added by develop"
+touch dfile2 ; git add dfile2 ; git commit -m "added by develop"
+git branch feabranch1
+git branch feabranch2
+for i in dfile3 ; do  touch $i ; git add . ; git commit -m "added by devlop"; done
+
+git checkout feabranch2
+for i in newfea2.1 ; do  touch $i ; git add . ; git commit -m "added by feabranch2"; done
+
+git checkout feabranch1
+for i in newfea1.1 ; do  touch $i ; git add . ; git commit -m "added by feabranch1"; done
+for i in newfea1.2 ; do  touch $i ; git add . ; git commit -m "added by feabranch1"; done
+
+git checkout feabranch2
+for i in newfea2.2 ; do  touch $i ; git add . ; git commit -m "added by feabranch2"; done
+
+git checkout develop
+git checkout --orphan hotfixes
+git rm --cached *
+rm -rf *
+for i in hotfix ; do  touch $i ; git add . ; git commit -m "added by hotfixes" ; done
+
+git checkout develop
+git merge hotfixes
+
+git checkout master
+git merge hotfixes
+git tag 0.2
+
+git checkout develop
+git merge feabranch1
+
+git checkout develop
+git checkout -b reabranch
+for i in bugfix; do  touch $i ; git add . ; git commit -m "added by reabranch" ; done
+git merge --no-ff reabranch
+
+git checkout develop
+git merge reabranch
+
+git checkout feabranch2
+for i in newfea2.3; do  touch $i ; git add . ; git commit -m "added by feabranch2" ; done
+
+git checkout feabranch1
+git merge develop
+
+git checkout reabranch
+for i in bugfix1.1; do  touch $i ; git add . ; git commit -m "added by reabranch" ; done
+for i in bugfix1.2; do  touch $i ; git add . ; git commit -m "added by reabranch" ; done
+
+git checkout master
+git merge reabranch
+git tag 1.0
+
+git checkout develop
+git merge reabranch
+
+git checkout feabranch1
+for i in newfea1.3 ; do  touch $i ; git add . ; git commit -m "added by feabranch1"; done
+for i in newfea1.4 ; do  touch $i ; git add . ; git commit -m "added by feabranch1"; done
+
+git checkout develop
+git merge feabranch1
+
+git checkout feabranch2
+for i in newfea2.4; do  touch $i ; git add . ; git commit -m "added by feabranch2" ; done
+
+git checkout develop
+git merge feabranch2
+
+git checkout reabranch
+git merge develop
+
+git checkout master
+git merge reabranch
 
 ------------------------------------------------------------------------------------------------------------------
+git show-branch -a \
+| grep '\*' \
+| grep -v `git rev-parse --abbrev-ref HEAD` \
+| head -n1 \
+| sed 's/.*\[\(.*\)\].*/\1/' \
+| sed 's/[\^~].*//'
+
+git log --graph --decorate --simplify-by-decoration
+git log --decorate --graph --oneline
+
 
 ------------------------------------------------------------------------------------------------------------------
 
