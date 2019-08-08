@@ -1,6 +1,6 @@
 ------------------------------------------------------------------------------------------------------------------
-
 June 27, 2019
+------------------------------------------------------------------------------------------------------------------
 
 working tree - (git add, git clean -fd .) - stagging/indexing area - (git commit) - local repo - (push/pull) - remote repo -  - stash
 
@@ -16,8 +16,8 @@ git status
 git log --decorate --oneline --graph
 
 ------------------------------------------------------------------------------------------------------------------
-
 June 29, 2019
+------------------------------------------------------------------------------------------------------------------
 
 ** git-clean - Remove untracked files from the working tree
 ** if you want to remove all the files which is not commited to repository use: / untracked files from git..
@@ -48,8 +48,8 @@ Username for 'https://github.com': sivaprasad.kammara@gmail.com
 Password for 'https://sivaprasad.kammara@gmail.com@github.com':
 
 ------------------------------------------------------------------------------------------------------------------
-
 July 07, 2019
+------------------------------------------------------------------------------------------------------------------
 
 git remote add origin https://github.com/ksphub/KSPDocs.git
 create file push...
@@ -69,8 +69,8 @@ git remote add just creates an entry in your git config that specifies a name fo
 git clone creates a new git repository by copying an existing one located at the URI you specify.
 
 ------------------------------------------------------------------------------------------------------------------
-
 July 11, 2019
+------------------------------------------------------------------------------------------------------------------
 
 Jenkins and Git overview
 
@@ -80,9 +80,9 @@ https://www.atlassian.com/git/tutorials/using-branches
 
 /root/soft/gittest/gitbranch
 
-
+------------------------------------------------------------------------------------------------------------------
 Aut 07, 2019
-------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------
 
 touch f1 f2; git add f1 f2 
 git commit -m "3rd commit" f2
@@ -105,4 +105,180 @@ commited files:
  (use "git add/rm <file>..." to update what will be committed)
  (use "git checkout -- <file>..." to discard changes in working directory)
 
+
 ------------------------------------------------------------------------------------------------------------------
+
+Aug 08, 2019
+
+list branch
+git branch 
+
+create branch
+git branch develop
+
+switch to branch
+git checkout develop
+
+create and switch
+git checkout -b develop2
+
+git log --decorate --oneline --graph
+
+to merge develop to master
+git checkout master
+git merge develop
+
+
+
+
+------------------------------------------------------------------------------------------------------------------
+git tasks:
+------------------------------------------------------------------------------------------------------------------
+
+git installation - yum install git
+
+Git-status is used to understand what stage the files in a repository are at.
+git status - fatal: Not a git repository (or any of the parent directories): .git
+
+git init - Initialized empty Git repository in /root/soft/gittest/user5/.git/
+
+how will you configure your developers username and email
+
+how to list git configuration
+git config --list
+
+what are the 3 phases in git - working dir/staging area/local repo
+
+what is commit and how will you commit a file - The "commit" command is used to save your changes to the local repository.
+how will you check your commits - git log
+how will you commit tracked files to local repo with single command
+
+what is the purpose of git - The purpose of Git is to manage a project, or a set of files, as they change over time. Git stores this information in a data structure called a repository. A git repository contains, among other things, the following: A set of commit objects.
+
+clean your working dir
+
+copy file from local repo to staging/index area
+
+unstage file
+
+copy file from local repo directly to workspace
+
+how will you clone , push , pull
+
+while pushing you are getting rejected error?
+
+github repo... collabarative access, email notification on commits
+
+branch - create, list, change, rename, create and switch in one go,  merge fast-forward, merge conflicts, skip conflicts, delete local branch, delete remote branch, without merge delete, rebase, merge vs rebase, fetch 
+https://medium.com/@haydar_ai/learning-how-to-git-merging-branches-and-resolving-conflict-61652834d4b0
+https://www.atlassian.com/git/tutorials/rewriting-history/git-rebase
+
+
+how to create cmd alias to git command , remove
+
+how to ignore files in git
+
+what is stash memory.. list, stash , unstash, pop, apply, drop, show
+
+what is tag .. list, create, delete, push
+
+
+------------------------------------------------------------------------------------------------------------------
+references:
+------------------------------------------------------------------------------------------------------------------
+
+akshata.shetty49@gmail.com
+https://github.com/akshatahub6
+nation$$$8+18+18+1
+
+https://nvie.com/posts/a-successful-git-branching-model/
+
+
+------------------------------------------------------------------------------------------------------------------
+Yet to Discuss:
+------------------------------------------------------------------------------------------------------------------
+
+You need to commit at least one time on master before creating a new branch.
+
+https://career.guru99.com/top-40-interview-questions-on-git/
+
+https://github.com/
+
+git help config
+       When reading, the values are read from the system, global and repository local configuration files by default, and options
+       --system, --global, --local and --file <filename> can be used to tell the command to read from only that location (see the
+       section called “FILES”).
+
+cat ~/.gitconfig
+cat .git/config
+git config --list
+
+~/.gitconfig --global
+.git/config --local
+/etc/gitconfig --system
+git config --list  --file /tmp/fileconfig
+
+
+git config --global --edit
+git config --local --edit
+git config --system --edit 
+git config --edit  --file /tmp/fileconfig	
+
+git config --global user.email "sivaprasad.kammara@gmail.com"
+git config --global user.name "ksphub"
+
+git config --global --unset-all  user.name
+git config --global --unset-all  user.email
+git config --global --replace-all user.email "you@example.com"
+git config --global --replace-all user.name "Your Name"
+
+[root@ip-172-31-32-89 ksp4]# git config --local --list
+
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+
+[root@ip-172-31-32-89 ksp4]# git config --global --list
+
+user.email=sivaprasad.kammara@gmail.com
+user.name=ksphub
+[root@ip-172-31-32-89 ksp4]# git config --system --list
+fatal: unable to read config file '/etc/gitconfig': No such file or directory
+
+[root@ip-172-31-32-89 ksp4]# git config --list
+
+user.email=sivaprasad.kammara@gmail.com
+user.name=ksphub
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+
+[root@ip-172-31-32-89 ksp4]#
+
+git clone https://github.com/ksphub/centralrepo.git
+https://github.com/ksphub/centralrepo.git
+git push origin master
+
+git log --stat --summary
+git help tutorial
+git help add/status/config
+
+git remote -v
+git remote add origin https://github.com/ksphub/centralrepo.git
+git push -u origin master
+
+https://github.com/ksphub/KSPDocs.git
+
+
+------------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------------------------------------
+
