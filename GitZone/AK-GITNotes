@@ -81,7 +81,7 @@ https://www.atlassian.com/git/tutorials/using-branches
 /root/soft/gittest/gitbranch
 
 ------------------------------------------------------------------------------------------------------------------
-Aut 07, 2019
+Aug 07, 2019
 ------------------------------------------------------------------------------------------------------------------
 
 touch f1 f2; git add f1 f2 
@@ -96,6 +96,7 @@ git log --author=authorname
 git log --since=yy-mm-dd
 git log --until=yy-mm-dd
 git log --oneline --decorate ; useful in multiple branches
+git log --stat --summary
 
 git reset --soft lastcommitid-1 (copy file from local repo to staging/index area)
 git reset HEAD filename (unstage)
@@ -107,8 +108,8 @@ commited files:
 
 
 ------------------------------------------------------------------------------------------------------------------
-
 Aug 08, 2019
+------------------------------------------------------------------------------------------------------------------
 
 list branch:
 git branch 
@@ -122,37 +123,64 @@ git checkout develop
 create and switch:
 git checkout -b develop2
 
+------------------------------------------------------------------------------------------------------------------
+Aug 10, 2019
+------------------------------------------------------------------------------------------------------------------
+
 rename branch:
 git branch -m  develop develop2
 
 replace branch:
 git branch -M test develop2
 
+git log --decorate --oneline --graph
+------------------------------------------------------------------------------------------------------------------
+Aug 11, 2019
+------------------------------------------------------------------------------------------------------------------
 
 delete branch:
 git branch -d hotfixes
 git branch -D hotfixes
 
-git log --decorate --oneline --graph
+set command alias:
+git config --global alias.lo "log --oneline"
+git config --global alias.lod "log --oneline --decorate"
+git config --list | grep -i alias
+git config --global --unset alias.lo
 
-to merge develop to master (fast-farward - without conflicts;  developers updates a file on branch and no commits on master ):
+for i in  file3 ; do touch $i ; git add . ; git commit -m "added $i"; done
+
+------------------------------------------------------------------------------------------------------------------
+Aug 12, 2019
+------------------------------------------------------------------------------------------------------------------
+
+to merge develop to master (fast-farward - without conflicts;  developers commits on branch and no commits on master ):
 git checkout master
 git merge develop
 
-to merge develop to master (with conflicts - 2 developers update's same file; Automatic merge failed; fix conflicts and then commit the result. ):
+to merge develop to master (with conflicts - 2 developers update's same file; Automatic merge failed (Merge made by the 'recursive' strategy.)
+; fix conflicts and then commit the result. ):
 git checkout master
 git merge develop
 
-to merge develop to master (with conflicts - 2 developers update's updates different file ; Merge made by the 'recursive' strategy. ):
+to merge develop to master (with out conflicts - 2 developers update's updates different file ; you will get extra commit. ):
 git checkout master
 git merge develop
 
+echo masterhi >> file4 ; git add . ; git commit -m "added edited by master"
 
-create tag...
+[root@ip-172-31-46-219 user8]# git merge dev1
+Auto-merging file4
+CONFLICT (content): Merge conflict in file4
+Automatic merge failed; fix conflicts and then commit the result.
+
+
+create tag... realease point...
 git tag 0.1
 git tag --list / git tag
 git tag -d list
-
+git push https://github.com/ksphub/testrepo2.git 0.1
+git push https://github.com/ksphub/testrepo2.git --tags
 
 edit and commit one shot for tracked files:
 echo master >> mfile ; git commit -am "updated by master"
@@ -160,14 +188,99 @@ echo master >> mfile ; git commit -am "updated by master"
 to edit comment:
 git commit --amend -m "updated comments"
 
-set command alias
-git config --global alias.lo "log --oneline"
-git config --global alias.lod "log --oneline --decorate"
-git config --list | grep -i alias
-git config --global --unset alias.lo
+------------------------------------------------------------------------------------------------------------------
+practice: https://nvie.com/posts/a-successful-git-branching-model/
+------------------------------------------------------------------------------------------------------------------
 
+mkdir gmodel2 ; cd gmodel2
 
-create a empty branch
+git status; git init ; git status
+git branch ; git log
+touch masterfile ; git add masterfile ; git commit -m "added by master"
+git tag; git tag 0.1; git tag
+
+git checkout -b develop
+touch dfile1 ; git add dfile1 ; git commit -m "added by develop"
+touch dfile2 ; git add dfile2 ; git commit -m "added by develop"
+git branch feabranch1
+git branch feabranch2
+for i in dfile3 ; do  touch $i ; git add . ; git commit -m "added by devlop"; done
+
+git checkout feabranch2
+for i in newfea2.1 ; do  touch $i ; git add . ; git commit -m "added by feabranch2"; done
+
+git checkout feabranch1
+for i in newfea1.1 ; do  touch $i ; git add . ; git commit -m "added by feabranch1"; done
+for i in newfea1.2 ; do  touch $i ; git add . ; git commit -m "added by feabranch1"; done
+
+git checkout feabranch2
+for i in newfea2.2 ; do  touch $i ; git add . ; git commit -m "added by feabranch2"; done
+
+git checkout develop
+git checkout --orphan hotfixes
+git rm --cached *
+rm -rf *
+for i in hotfix ; do  touch $i ; git add . ; git commit -m "added by hotfixes" ; done
+
+git checkout develop
+git merge hotfixes
+
+git checkout master
+git merge hotfixes
+git tag 0.2
+
+git checkout develop
+git merge feabranch1
+
+git checkout develop
+git checkout -b reabranch
+for i in bugfix; do  touch $i ; git add . ; git commit -m "added by reabranch" ; done
+git merge --no-ff reabranch
+
+git checkout develop
+git merge reabranch
+
+git checkout feabranch2
+for i in newfea2.3; do  touch $i ; git add . ; git commit -m "added by feabranch2" ; done
+
+git checkout feabranch1
+git merge develop
+
+git checkout reabranch
+for i in bugfix1.1; do  touch $i ; git add . ; git commit -m "added by reabranch" ; done
+for i in bugfix1.2; do  touch $i ; git add . ; git commit -m "added by reabranch" ; done
+
+git checkout master
+git merge reabranch
+git tag 1.0
+
+git checkout develop
+git merge reabranch
+
+git checkout feabranch1
+for i in newfea1.3 ; do  touch $i ; git add . ; git commit -m "added by feabranch1"; done
+for i in newfea1.4 ; do  touch $i ; git add . ; git commit -m "added by feabranch1"; done
+
+git checkout develop
+git merge feabranch1
+
+git checkout feabranch2
+for i in newfea2.3; do  touch $i ; git add . ; git commit -m "added by feabranch2" ; done
+
+git checkout develop
+git merge feabranch2
+
+git checkout reabranch
+git merge develop
+
+git checkout master
+git merge reabranch
+
+------------------------------------------------------------------------------------------------------------------
+Aug 13, 2019
+------------------------------------------------------------------------------------------------------------------
+
+create a empty/orphan branch
 
 git checkout --orphan hotfixes 
 ( git status ; git branch ; check default branch not selected and git log
@@ -175,10 +288,21 @@ fatal: bad default revision 'HEAD')
 Switched to a new branch 'hotfixes'
 
 git rm --cached *
-rm *
+git clean -fd . / rm -f *
 
 for i in bugfix ; do  touch $i ; git add . ; git commit -m "added $i"; done
 git log --oneline ; git branch
+
+
+git cherry-pick commitid -- to pick particular commit id from other branchers..
+git cherry-pick dev3
+git cherry-pick ..dev3
+
+git stash / git stash save "label"
+git stash list
+git stash show
+git stash pop
+git stash apply
 
 
 list only current branch:
@@ -188,6 +312,13 @@ git rev-parse --abbrev-ref HEAD
 create a file:
 for i in dfile5 ; do  touch $i ; git add . ; git commit -m "added $i"; done
 for i in dfile1 dfile2 dfile3 ; do  touch $i ; git add . ; git commit -m "added $i"; done
+
+------------------------------------------------------------------------------------------------------------------
+Aug 14, 2019
+------------------------------------------------------------------------------------------------------------------
+
+git - init, status, branch, add , commit (amend), merge (ff one commit one branch, 2 commits on different file d/f branch, 2 commits samefile d/f branch), checkout (orphan), cherry-pick, stash, push, clone, pull, tag, clean, origin, rebase
+
 
 ------------------------------------------------------------------------------------------------------------------
 git tasks:
@@ -245,11 +376,8 @@ what is tag .. list, create, delete, push
 references:
 ------------------------------------------------------------------------------------------------------------------
 
-akshata.shetty49@gmail.com
-https://github.com/akshatahub6
-nation$$$8+18+18+1
-
 https://nvie.com/posts/a-successful-git-branching-model/
+https://www.bogotobogo.com/DevOps/DevOps_CI_CD_Pipeline_Sample.php
 
 
 ------------------------------------------------------------------------------------------------------------------
@@ -329,95 +457,6 @@ git push -u origin master
 
 https://github.com/ksphub/KSPDocs.git
 
-
-------------------------------------------------------------------------------------------------------------------
-practice: https://nvie.com/posts/a-successful-git-branching-model/
-
-mkdir gmodel2 ; cd gmodel2
-
-git status; git init ; git status
-git branch ; git log
-touch masterfile ; git add masterfile ; git commit -m "added by master"
-git tag; git tag 0.1; git tag
-
-git checkout -b develop
-touch dfile1 ; git add dfile1 ; git commit -m "added by develop"
-touch dfile2 ; git add dfile2 ; git commit -m "added by develop"
-git branch feabranch1
-git branch feabranch2
-for i in dfile3 ; do  touch $i ; git add . ; git commit -m "added by devlop"; done
-
-git checkout feabranch2
-for i in newfea2.1 ; do  touch $i ; git add . ; git commit -m "added by feabranch2"; done
-
-git checkout feabranch1
-for i in newfea1.1 ; do  touch $i ; git add . ; git commit -m "added by feabranch1"; done
-for i in newfea1.2 ; do  touch $i ; git add . ; git commit -m "added by feabranch1"; done
-
-git checkout feabranch2
-for i in newfea2.2 ; do  touch $i ; git add . ; git commit -m "added by feabranch2"; done
-
-git checkout develop
-git checkout --orphan hotfixes
-git rm --cached *
-rm -rf *
-for i in hotfix ; do  touch $i ; git add . ; git commit -m "added by hotfixes" ; done
-
-git checkout develop
-git merge hotfixes
-
-git checkout master
-git merge hotfixes
-git tag 0.2
-
-git checkout develop
-git merge feabranch1
-
-git checkout develop
-git checkout -b reabranch
-for i in bugfix; do  touch $i ; git add . ; git commit -m "added by reabranch" ; done
-git merge --no-ff reabranch
-
-git checkout develop
-git merge reabranch
-
-git checkout feabranch2
-for i in newfea2.3; do  touch $i ; git add . ; git commit -m "added by feabranch2" ; done
-
-git checkout feabranch1
-git merge develop
-
-git checkout reabranch
-for i in bugfix1.1; do  touch $i ; git add . ; git commit -m "added by reabranch" ; done
-for i in bugfix1.2; do  touch $i ; git add . ; git commit -m "added by reabranch" ; done
-
-git checkout master
-git merge reabranch
-git tag 1.0
-
-git checkout develop
-git merge reabranch
-
-git checkout feabranch1
-for i in newfea1.3 ; do  touch $i ; git add . ; git commit -m "added by feabranch1"; done
-for i in newfea1.4 ; do  touch $i ; git add . ; git commit -m "added by feabranch1"; done
-
-git checkout develop
-git merge feabranch1
-
-git checkout feabranch2
-for i in newfea2.4; do  touch $i ; git add . ; git commit -m "added by feabranch2" ; done
-
-git checkout develop
-git merge feabranch2
-
-git checkout reabranch
-git merge develop
-
-git checkout master
-git merge reabranch
-
-------------------------------------------------------------------------------------------------------------------
 git show-branch -a \
 | grep '\*' \
 | grep -v `git rev-parse --abbrev-ref HEAD` \
@@ -434,4 +473,612 @@ git log --decorate --graph --oneline
 ------------------------------------------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------------------------------------------
+
+Aug 16,2019
+
+Maven:
+
+
+[root@ip-172-31-35-172 ~]# vi /etc/selinux/config
+[root@ip-172-31-35-172 ~]# getenforce
+Permissive
+[root@ip-172-31-35-172 ~]# setenforce 0
+[root@ip-172-31-35-172 ~]# getenforce
+Permissive
+
+
+yum install wget -y
+wget http://apachemirror.wuchna.com/maven/maven-3/3.6.1/binaries/apache-maven-3.6.1-bin.tar.gz
+
+tar -xvf apache-maven-3.6.1-bin.tar.gz
+cat apache-maven-3.6.1/README.txt
+
+wget https://download.oracle.com/otn/java/jdk/8u221-b11/230deb18db3e4014bb8e3e8324f81b43/jdk-8u221-linux-x64.tar.gz?AuthParam=1565921966_b8a83a28f88367687f28373c8cd337d8
+
+tar -xvf jdk-8u221-linux-x64.tar.gz?AuthParam=1565921966_b8a83a28f88367687f28373c8cd337d8
+
+mv jdk-8u221-linux-x64.tar.gz?AuthParam=1565921966_b8a83a28f88367687f28373c8cd337d8 jdk-8u221-linux-x64.tar.gz
+
+tar -xvf jdk-8u221-linux-x64.tar.gz
+
+[root@ip-172-31-35-172 bin]# pwd
+/root/soft/jdk1.8.0_221/bin
+
+[root@ip-172-31-35-172 soft]# ./jdk1.8.0_221/bin/java -version
+java version "1.8.0_221"
+Java(TM) SE Runtime Environment (build 1.8.0_221-b11)
+Java HotSpot(TM) 64-Bit Server VM (build 25.221-b11, mixed mode)
+
+
+[root@ip-172-31-35-172 bin]# java -version
+-bash: java: command not found
+
+[root@ip-172-31-35-172 bin]# ./java -version
+java version "1.8.0_221"
+Java(TM) SE Runtime Environment (build 1.8.0_221-b11)
+Java HotSpot(TM) 64-Bit Server VM (build 25.221-b11, mixed mode)
+[root@ip-172-31-35-172 bin]#
+
+[root@ip-172-31-35-172 soft]# export JAVA_HOME=/root/soft/jdk1.8.0_221
+
+[root@ip-172-31-35-172 soft]# echo $JAVA_HOME
+/root/soft/jdk1.8.0_221
+
+[root@ip-172-31-35-172 soft]# export PATH=$PATH:$JAVA_HOME/bin
+[root@ip-172-31-35-172 soft]# echo $PATH
+/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:/root/soft/jdk1.8.0_221/bin
+[root@ip-172-31-35-172 soft]#
+
+
+which ls
+/bin/ls
+
+echo $PATH
+/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
+
+which ls
+whereis ls
+
+user home dir ; ll -a
+.bash_profile
+
+------------------------------------------------------------------------------------------------------------------
+Aug 17,2019
+------------------------------------------------------------------------------------------------------------------
+
+create repo in github 
+git push -u origin master
+git tag
+
+set session level environment variables
+set user level environment variables
+set system level environment variables
+
+------------------------------------------------------------------------------------------------------------------
+Aug 19, 2019
+------------------------------------------------------------------------------------------------------------------
+
+wget https://download.oracle.com/otn/java/jdk/8u221-b11/230deb18db3e4014bb8e3e8324f81b43/jdk-8u221-linux-x64.tar.gz?AuthParam=1565921966_b8a83a28f88367687f28373c8cd337d8
+
+mv jdk-8u221-linux-x64.tar.gz?AuthParam=1565921966_b8a83a28f88367687f28373c8cd337d8 jdk-8u221-linux-x64.tar.gz
+
+tar -xvf jdk-8u221-linux-x64.tar.gz
+
+vi ~/.bash_profile
+
+JAVA_HOME=/root/soft/jdk1.8.0_221
+export PATH=$PATH:$JAVA_HOME/bin
+
+java -version (java --version)
+
+java version "1.8.0_221"
+Java(TM) SE Runtime Environment (build 1.8.0_221-b11)
+Java HotSpot(TM) 64-Bit Server VM (build 25.221-b11, mixed mode)
+
+wget http://apachemirror.wuchna.com/maven/maven-3/3.6.1/binaries/apache-maven-3.6.1-bin.tar.gz
+
+tar -xvf apache-maven-3.6.1-bin.tar.gz
+cat apache-maven-3.6.1/README.txt
+ll apache-maven-3.6.1/bin
+
+./apache-maven-3.6.1/bin/mvn --version
+
+export M2_HOME=/opt/soft/apache-maven-3.6.1
+echo $PATH
+export PATH=$PATH:$M2_HOME/bin
+echo $PATH
+
+mvn --version
+Apache Maven 3.6.1 (d66c9c0b3152b2e69ee9bac180bb8fcc8e6af555; 2019-04-04T19:00:29Z)
+Maven home: /opt/soft/apache-maven-3.6.1
+Java version: 1.8.0_221, vendor: Oracle Corporation, runtime: /opt/soft/jdk1.8.0_221/jre
+Default locale: en_US, platform encoding: UTF-8
+OS name: "linux", version: "3.10.0-957.1.3.el7.x86_64", arch: "amd64", family: "unix"
+
+--------------------------------------------------------------
+
+Maven is a build automation tool used primarily for Java projects, Apache Maven is a software project management and comprehension tool. Based on the concept of a project object model (POM). it is plugin based...
+
+Life Cycle is a collection of phase in sequence
+
+https://stackoverflow.com/questions/16205778/what-are-maven-goals-and-phases-and-what-is-their-difference
+
+There are following three built-in build lifecycles:
+
+    default
+    clean
+    site
+
+Lifecycle default -> [validate, initialize, generate-sources, process-sources, generate-resources, process-resources, compile, process-classes, generate-test-sources, process-test-sources, generate-test-resources, process-test-resources, test-compile, process-test-classes, test, prepare-package, package, pre-integration-test, integration-test, post-integration-test, verify, install, deploy]
+
+Lifecycle clean -> [pre-clean, clean, post-clean]
+
+Lifecycle site -> [pre-site, site, post-site, site-deploy]
+
+--------------------------------------------------------------
+
+A Build (Default) Lifecycle is Made Up of Phases
+
+Each of these build lifecycles is defined by a different list of build phases, wherein a build phase represents a stage in the lifecycle.
+
+For example, the default lifecycle comprises of the following phases (for a complete list of the lifecycle phases, refer to the Lifecycle Reference):
+
+    validate - validate the project is correct and all necessary information is available
+    compile - compile the source code of the project
+    test - test the compiled source code using a suitable unit testing framework. These tests should not require the code be packaged or deployed
+    package - take the compiled code and package it in its distributable format, such as a JAR.
+    verify - run any checks on results of integration tests to ensure quality criteria are met
+    install - install the package into the local repository, for use as a dependency in other projects locally
+    deploy - done in the build environment, copies the final package to the remote repository for sharing with other developers and projects.
+
+--------------------------------------------------------------
+
+to create sample project... folder struction of project
+
+mvn archetype:generate
+
+maven-archetype-quickstart (sample to create jar file)
+
+Choose archetype:
+Choose org.apache.maven.archetypes:maven-archetype-quickstart version:
+Define value for property 'groupId':
+Define value for property 'artifactId':
+Define value for property 'version' 1.0-SNAPSHOT: :
+Define value for property 'package' Testgrp: :
+
+Confirm properties configuration:
+groupId: Testgrp
+artifactId: Testartifact
+version: 1.0-SNAPSHOT
+package: Testgrp
+ Y: :
+
+[INFO] ----------------------------------------------------------------------------
+[INFO] Using following parameters for creating project from Archetype: maven-archetype-quickstart:1.4
+[INFO] ----------------------------------------------------------------------------
+[INFO] Parameter: groupId, Value: Testgrp
+[INFO] Parameter: artifactId, Value: Testartifact
+[INFO] Parameter: version, Value: 1.0-SNAPSHOT
+[INFO] Parameter: package, Value: Testgrp
+[INFO] Parameter: packageInPathFormat, Value: Testgrp
+[INFO] Parameter: package, Value: Testgrp
+[INFO] Parameter: version, Value: 1.0-SNAPSHOT
+[INFO] Parameter: groupId, Value: Testgrp
+[INFO] Parameter: artifactId, Value: Testartifact
+[INFO] Project created from Archetype in dir: /opt/soft/mvntask/Testartifact
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  08:00 min
+[INFO] Finished at: 2019-08-19T02:24:30Z
+[INFO] ------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------
+
+artifactId - project name....
+
+cd Testartifact
+mv pom.xml pom.xml_master
+
+[root@ip-172-31-35-172 Testartifact]# mvn validate
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  0.156 s
+[INFO] Finished at: 2019-08-19T02:35:33Z
+[INFO] ------------------------------------------------------------------------
+[ERROR] The goal you specified requires a project to execute but there is no POM in this directory (/opt/soft/mvntask/Testartifact). Please verify you invoked Maven from the correct directory. -> [Help 1]
+[ERROR]
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR]
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MissingProjectException
+[root@ip-172-31-35-172 Testartifact]#
+
+mv pom.xml_master pom.xml
+
+mvn compile
+
+ar (27 kB at 188 kB/s)
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 1 source file to /opt/soft/mvntask/Testartifact/target/classes
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  6.727 s
+[INFO] Finished at: 2019-08-19T02:38:34Z
+[INFO] ------------------------------------------------------------------------
+[root@ip-172-31-35-172 Testartifact]#
+
+
+file src/main/java/Testgrp/App.java
+src/main/java/Testgrp/App.java: Perl5 module source, ASCII text
+
+
+file target/classes/Testgrp/App.class
+target/classes/Testgrp/App.class: compiled Java class data, version 51.0 (Java 1.7)
+
+
+mvn test
+
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/surefire/surefire-junit4/2.22.1/surefire-junit4-2.22.1.jar (85 kB at 2.1 MB/s)
+[INFO]
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running Testgrp.AppTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.122 s - in Testgrp.AppTest
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  7.433 s
+[INFO] Finished at: 2019-08-19T02:43:21Z
+[INFO] ------------------------------------------------------------------------
+[root@ip-172-31-35-172 Testartifact]#
+
+mvn package (JAR/WAR/EAR...package formarts...)
+
+Downloaded from central: https://repo.maven.apache.org/maven2/org/tukaani/xz/1.5/xz-1.5.jar (100 kB at 332 kB/s)
+[INFO] Building jar: /opt/soft/mvntask/Testartifact/target/Testartifact-1.0-SNAPSHOT.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  5.894 s
+[INFO] Finished at: 2019-08-19T02:44:04Z
+[INFO] ------------------------------------------------------------------------
+[root@ip-172-31-35-172 Testartifact]#
+
+project create -- source code --- compile -- package
+
+mvn clean
+
+[INFO]
+[INFO] --- maven-clean-plugin:3.1.0:clean (default-clean) @ Testartifact ---
+[INFO] Deleting /opt/soft/mvntask/Testartifact/target
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.967 s
+[INFO] Finished at: 2019-08-19T02:49:23Z
+[INFO] ------------------------------------------------------------------------
+[root@ip-172-31-35-172 Testartifact]# ll
+total 4
+-rw-r--r--. 1 root root 2655 Aug 19 02:24 pom.xml
+drwxr-xr-x. 4 root root   30 Aug 19 02:24 src
+
+[root@ip-172-31-35-172 Testartifact]#
+
+
+------------------------------------------------------------------------------------------------------------------
+Aug 20, 2019
+------------------------------------------------------------------------------------------------------------------
+
+mvn archetype:generate
+maven-archetype-webapp (sample to create war file)
+
+Define value for property 'groupId': test.com
+Define value for property 'artifactId': projecttest
+Define value for property 'version' 1.0-SNAPSHOT: :
+Define value for property 'package' test.com: : testpackage.com
+Confirm properties configuration:
+groupId: test.com
+artifactId: projecttest
+version: 1.0-SNAPSHOT
+package: testpackage.com
+ Y: :
+
+artifactId - project name in this name dir create..
+
+mvn package
+projecttest.war
+
+Tomcat Server:
+
+search tomcat server
+https://tomcat.apache.org/download-80.cgi
+right click on *.tar.gz copy link location then use wget paste the link to donwload
+
+useradd tomcat
+wget http://mirrors.estointernet.in/apache/tomcat/tomcat-8/v8.5.43/bin/apache-tomcat-8.5.43.tar.gz
+tar -xvf apache-tomcat-8.5.43.tar.gz
+chown -R tomcat: apache-tomcat-8.5.43
+./apache-tomcat-8.5.43/bin/catalina.sh -h
+
+Usage: catalina.sh ( commands ... )
+commands:
+  debug             Start Catalina in a debugger
+  debug -security   Debug Catalina with a security manager
+  jpda start        Start Catalina under JPDA debugger
+  run               Start Catalina in the current window
+  run -security     Start in the current window with security manager
+  start             Start Catalina in a separate window
+  start -security   Start in a separate window with security manager
+  stop              Stop Catalina, waiting up to 5 seconds for the process to end
+  stop n            Stop Catalina, waiting up to n seconds for the process to end
+  stop -force       Stop Catalina, wait up to 5 seconds and then use kill -KILL if still running
+  stop n -force     Stop Catalina, wait up to n seconds and then use kill -KILL if still running
+  configtest        Run a basic syntax check on server.xml - check exit code for result
+  version           What version of tomcat are you running?
+
+./apache-tomcat-8.5.43/bin/catalina.sh version
+
+catalina.sh version
+-bash: catalina.sh: command not found
+
+echo $PATH
+/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/opt/soft/jdk1.8.0_221/bin:java2:/root/bin:/opt/soft/jdk1.8.0_221/bin:/opt/soft/apache-maven-3.6.1/bin
+
+export PATH=$PATH:/opt/soft/apache-tomcat-8.5.43/bin
+
+echo $PATH
+/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/opt/soft/jdk1.8.0_221/bin:java2:/root/bin:/opt/soft/jdk1.8.0_221/bin:/opt/soft/apache-maven-3.6.1/bin:/opt/soft/apache-tomcat-8.5.43/bin
+
+catalina.sh version
+
+catalina.sh start
+Using CATALINA_BASE:   /opt/soft/apache-tomcat-8.5.43
+Using CATALINA_HOME:   /opt/soft/apache-tomcat-8.5.43
+Using CATALINA_TMPDIR: /opt/soft/apache-tomcat-8.5.43/temp
+Using JRE_HOME:        /opt/soft/jdk1.8.0_221
+Using CLASSPATH:       /opt/soft/apache-tomcat-8.5.43/bin/bootstrap.jar:/opt/soft/apache-tomcat-8.5.43/bin/tomcat-juli.jar
+Tomcat started.
+
+http://ip:8080
+
+netstat -tulpn | grep 8080
+
+ps -ef | grep -i tomcat
+
+root     13947     1  4 02:31 pts/2    00:00:02 /opt/soft/jdk1.8.0_221/bin/java -Djava.util.logging.config.file=/opt/soft/apache-tomca -8.5.43/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Djdk.tls.ephemeralDHKeySize=2048 -Djava.protocol.handler.pkgs=org.apache.catalina.webresources -Dorg.apache.catalina.security.SecurityListener.UMASK=0027 -Dignore.endorsed.dirs= -classpath /opt/soft/apache-tomcat-8.5.43/bin/bootstrap.jar:/opt/soft/apache-tomcat-8.5.43/bin/tomcat-juli.jar -Dcatalina.base=/opt/soft/apache-tomcat-8.5.43 -Dcatalina.home=/opt/soft/apache-tomcat-8.5.43 -Djava.io.tmpdir=/opt/soft/apache-tomcat-8.5.43/temp org.apache.catalina.startup.Bootstrap start
+
+------------------------------------------------------------------------------------------------------------------
+Aug 21, 2019
+------------------------------------------------------------------------------------------------------------------
+
+tomcat server url:
+http://3.17.62.98:8080/
+click on manager app tab..
+
+
+1. conf/tomcat-users.xml -- go to end of the file and append below lines before </tomcat-users>
+
+<role rolename="manager-gui"/>
+<user username="tomcat" password="tomcat123" roles="manager-gui,manager-script"/>
+
+2. vi  webapps/manager/META-INF/context.xml -- comment below lines...
+
+<Context antiResourceLocking="false" privileged="true" >
+<!--
+  <Valve className="org.apache.catalina.valves.RemoteAddrValve"
+         allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />
+-->
+
+http://3.17.62.98:8080/manager/html
+
+cd /opt/soft/mvntask/Testartifact
+cp target/Testartifact-1.0-SNAPSHOT.jar /opt/soft/apache-tomcat-8.5.43/webapps/
+http://3.17.62.98:8080/Testartifact/
+
+catalina.sh stop
+catalina.sh start
+
+------------------------------------------------------------------------------------------------------------------
+Aug 22, 2019
+------------------------------------------------------------------------------------------------------------------
+
+
+https://tomcat.apache.org/tomcat-8.5-doc/appdev/sample/
+https://tomcat.apache.org/tomcat-9.0-doc/manager-howto.html
+
+mvn archetype:generate
+maven-archetype-webapp ####(sample to create war file)
+
+
+Choose a number or apply filter (format: [groupId:]artifactId, case sensitive contains): 1401: maven-archetype-webapp
+Choose archetype:
+1: remote -> com.haoxuer.maven.archetype:maven-archetype-webapp (a simple maven archetype)
+2: remote -> com.lodsve:lodsve-maven-archetype-webapp (Lodsve Maven Archetype Webapp)
+3: remote -> org.apache.maven.archetypes:maven-archetype-webapp (An archetype which contains a sample Maven Webapp project.)
+Choose a number or apply filter (format: [groupId:]artifactId, case sensitive contains): : 3
+Choose org.apache.maven.archetypes:maven-archetype-webapp version:
+1: 1.0-alpha-1
+2: 1.0-alpha-2
+3: 1.0-alpha-3
+4: 1.0-alpha-4
+5: 1.0
+6: 1.3
+7: 1.4
+Choose a number: 7:
+Define value for property 'groupId': AK.COM
+Define value for property 'artifactId': AKProject
+Define value for property 'version' 1.0-SNAPSHOT: :
+Define value for property 'package' AK.COM: : AKPackage
+Confirm properties configuration:
+groupId: AK.COM
+artifactId: AKProject
+version: 1.0-SNAPSHOT
+package: AKPackage
+ Y: :
+
+
+
+java -cp /opt/soft/mvntask/CNA/target/CNA-1.0-SNAPSHOT.jar IBMPPACKAGE.App
+Hello World!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------
+Maven References:
+------------------------------------------------------------------------------------------------------------------
+
+https://maven.apache.org/index.html
+https://maven.apache.org/archetype/index.html
+https://maven.apache.org/archetype/maven-archetype-plugin/
+https://maven.apache.org/archetype/maven-archetype-plugin/usage.html
+https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html
+https://access.redhat.com/documentation/en-US/Fuse_ESB_Enterprise/7.1/html/Getting_Started/files/Develop.html
+https://maven.apache.org/guides/introduction/introduction-to-the-pom.html
+
+https://www.baeldung.com/maven-goals-phases
+
+
+mvn -h
+mvn help:describe -Dcmd=PHASENAME
+We can use the following command to list all goals in a specific plugin:
+mvn <PLUGIN>:help
+https://maven.apache.org/plugins/maven-help-plugin/examples/describe-configuration.html
+mvn archetype:help
+mvn help:describe -Dplugin=help
+mvn help:describe -Dplugin=help -Dminimal=true
+mvn help:describe -Dplugin=help -Ddetail
+mvn help:describe -Dplugin=help -Ddetail=true -Doutput=/path/to/file
+mvn install:help
+mvn install:help -Ddetail=true -Dgoal=install
+
+dependency:purge-local-repository
+removes the project dependencies from the local repository, and optionally re-resolve them
+
+java -cp target/Testartifact-1.0-SNAPSHOT.jar Testgrp.App
+Hello World!
+
+ll ~/.m2/repository/
+
+dependency:purge-local-repository clean install
+groupId:artifactId entries
+groupId: Testgrp
+artifactId: Testartifact
+
+mvn dependency:purge-local-repository -Dinclude=Testgrp:Testartifact
+mvn dependency:purge-local-repository -Dinclude=Testgrp:Testartifact -DactTransitively=false -DreResolve=false
+No artifacts included for purge for project:
+
+mvn dependency:list
+
+delete project from ~/.m2/repository/
+mvn dependency:purge-local-repository -DmanualInclude="Testgrp"
+mvn dependency:purge-local-repository -DmanualInclude="Testgrp:Testartifact"
+
+https://www.tutorialspoint.com/maven/maven_web_application.htm
+
+mvn archetype:generate -DgroupId=com.companyname.automobile  -DartifactId=trucks -DarchetypeArtifactId=maven-archetype-webapp -DinteractiveMode=false
+Building war: /opt/soft/mvntask/trucks/target/trucks.war
+
+https://medium.com/@pra4mesh/deploy-war-in-docker-tomcat-container-b52a3baea448
+https://github.com/prameshbhattarai/docker-commands
+http://codeomitted.com/deploy-war-file-to-docker-image/
+
+https://www.baeldung.com/tomcat-deploy-war
+https://www.theserverside.com/tutorial/How-to-embed-Tomcat-and-Java-web-apps-in-an-executable-JAR
+
+
+------------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------------------------------------
+
+
 
