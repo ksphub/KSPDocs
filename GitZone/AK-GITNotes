@@ -1058,6 +1058,9 @@ https://github.com/ksphub/centralrepo.git
 Sep 03, 2019
 ------------------------------------------------------------------------------------------------------------------
 
+mvn archetype:generate -DgroupId=com.companyname.automobile -DartifactId=trucks -DarchetypeArtifactId=maven-archetype-webapp -DinteractiveMode=false
+
+or 
 
 mvn archetype:generate \
 	-DgroupId=com.companyname.automobile \
@@ -1066,12 +1069,42 @@ mvn archetype:generate \
 	-DinteractiveMode=false
 
 
-tomcat plugin - Deploy to container
+------------------------------------------------------------------------------------------------------------------
+Sep 04, 2019
+------------------------------------------------------------------------------------------------------------------
+
+mvn archetype:generate -DgroupId=com.companyname.automobile -DartifactId=trucks -DarchetypeArtifactId=maven-archetype-webapp -DinteractiveMode=false
+
+or
+
+mvn archetype:generate \
+	-DgroupId=com.companyname.automobile \
+	-DartifactId=trucks \
+	-DarchetypeArtifactId=maven-archetype-webapp \
+	-DinteractiveMode=false
+
+------------------------------------------------------------------------------------------------------------------
+Sep 05, 2019
+------------------------------------------------------------------------------------------------------------------
+
+1. proj1 in git repo and build step - invoke top level maven target..
+
+2. setup tomcat in jenkins
+
+install tomcat plugin - Deploy to container (to get deploy war/ear to a container  (post-build actions >)
 
 post-build actions > deploy war/ear to a container > war/ear files .. **/*.war > containers > tomcat 8.x > credentails of tomcatapp > qatomcaturl http://ip:8080
 
+https://github.com/ksphub/centralrepo.git
+
+3. auto deploy when there is a change in code.
 
 http://3.17.62.98:8080/github-webhook/
+
+git push https://github.com/ksphub/centralrepo.git master
+
+4. set up project dependency
+
 
 timestamp plugin - build timestamp
 yyyy-MM-dd HH:mm:ss z
@@ -1083,6 +1116,17 @@ IST yyyy-MM-dd_HH:mm:ss_z
 
 
 
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -1223,9 +1267,8 @@ https://www.baeldung.com/tomcat-deploy-war
 https://www.theserverside.com/tutorial/How-to-embed-Tomcat-and-Java-web-apps-in-an-executable-JAR
 
 
+
+https://www.youtube.com/watch?v=zqWCZiG2CLY&feature=youtu.be
 ------------------------------------------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------------------------------------------
-
-
-
