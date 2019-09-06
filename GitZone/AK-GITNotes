@@ -1105,10 +1105,16 @@ git push https://github.com/ksphub/centralrepo.git master
 
 4. set up project dependency
 
+------------------------------------------------------------------------------------------------------------------
+Sep 06, 2019
+------------------------------------------------------------------------------------------------------------------
 
-timestamp plugin - build timestamp
-yyyy-MM-dd HH:mm:ss z
-IST yyyy-MM-dd_HH:mm:ss_z
+JENKINS_URL/job/test2/build?token=TOKEN_NAME
+http://3.17.62.98:8080/job/test2/build?token=123456
+
+https://crontab.guru/
+
+Discussed build triggers... all 5 build triggers
 
 
 
