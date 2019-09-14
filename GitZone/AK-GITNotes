@@ -1116,7 +1116,122 @@ https://crontab.guru/
 
 Discussed build triggers... all 5 build triggers
 
+------------------------------------------------------------------------------------------------------------------
+Sep 11, 2019
+------------------------------------------------------------------------------------------------------------------
 
+Build Triggers Practice
+
+------------------------------------------------------------------------------------------------------------------
+Sep 12, 2019
+------------------------------------------------------------------------------------------------------------------
+
+Build Triggers Practice
+
+
+------------------------------------------------------------------------------------------------------------------
+Sep 13, 2019
+------------------------------------------------------------------------------------------------------------------
+
+Build Triggers Practice
+
+plugin - blue ocean
+plugin - build pipeline
+
+Build - execute shell
+See the list of available environment variables
+
+------------------------------------------------------------------------------------------------------------------
+Sep 14, 2019
+------------------------------------------------------------------------------------------------------------------
+
+Docker:
+
+https://www.edureka.co/blog/what-is-docker-container
+https://www.docker.com/resources/what-container
+
+Install docker
+
+vi docker_install.sh
+copy script from https://get.docker.com/
+
+chmod u+x docker_install.sh
+./docker_install.sh
+
+service docker start
+docker ps
+docker images
+docker search hello-world
+
+https://hub.docker.com/search?q=hello-world&type=image
+https://hub.docker.com/_/hello-world
+
+docker pull hello-world
+docker run -itd -p 80:80 hello-world
+docker ps
+docker ps -a
+
+docker run -it -p 80:80 hello-world
+Hello from Docker!
+
+docker pull tomcat
+docker run -it --rm -p 8888:8080 tomcat
+docker run -it -d --rm -p 8888:8080 tomcat
+docker ps
+
+docker rm containerid
+docker rmi imageid
+
+[root@ip-172-31-35-172 ~]# export TEST1=12345
+[root@ip-172-31-35-172 ~]# echo $TEST1
+12345
+[root@ip-172-31-35-172 ~]# bash
+[root@ip-172-31-35-172 ~]# echo $TEST1
+12345
+[root@ip-172-31-35-172 ~]# export TEST1=12345678910
+[root@ip-172-31-35-172 ~]# echo $TEST1
+12345678910
+[root@ip-172-31-35-172 ~]# exit
+exit
+[root@ip-172-31-35-172 ~]# echo $TEST1
+12345
+[root@ip-172-31-35-172 ~]#
+
+docker search centos
+docker pull centos
+docker run -it -d --name akcentos centos:latest
+docker attach 55ebac57ec8e
+exit -- it stops the container...
+docker start akcentos
+docker ps
+
+Once you have attached to a Docker Container via a CMD console typing exit at the console detatches from the container and Stops it. This is not usually what I want to do. To detatch from the container without stopping it press CTRL+P followed by CTRL+Q
+
+
+
+setname to docker container
+docker run -it --name devops-1 centos
+docker ps
+
+change name for existing container
+docker rename existingname newname
+docker ps
+
+docker search jenkins
+star rating / official.. we will use it
+
+docker search -s 100 jenkins
+star rating up to 100 stars
+
+container hostname... set... by default container id is hostname..
+set hostname
+docker -it -h batch24 centos
+
+docker attach containerid... by default root user will connect
+login as specific user..
+create  user in container and set password
+and login with that user..
+docker exec -it -u username containerid shell
 
 
 
