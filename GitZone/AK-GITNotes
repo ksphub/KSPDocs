@@ -1233,23 +1233,161 @@ create  user in container and set password
 and login with that user..
 docker exec -it -u username containerid shell
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ------------------------------------------------------------------------------------------------------------------
 
 
+------------------------------------------------------------------------------------------------------------------
+Sep 15, 2019
+------------------------------------------------------------------------------------------------------------------
+
+setname to docker container
+docker run -it --name devops-1 centos
+docker ps
+
+change name for existing container
+docker rename existingname newname
+docker ps
+
+docker search jenkins
+star rating / official.. we will use it
+
+docker search -s 100 jenkins
+star rating up to 100 stars
+
+container hostname... set... by default container id is hostname..
+set hostname
+docker -it -h batch24 centos
+
+docker attach containerid... by default root user will connect
+login as specific user..
+create  user in container and set password
+and login with that user..
+docker exec -it -u username containerid shell
+
+share the data between host and container ; between containers we will use below option while creating the contaier
+
+-v HostFolder:ContainerVolumeName
+docker run -it -d --name cont5 -h server5 -v /mnt:/mnt centos
+docker attach cont5
+
+https://rominirani.com/docker-tutorial-series-part-7-data-volumes-93073a1b5b72
+
+docker inspect cont4
+docker stats cont4
+docker logs cont4
+
+create your id in https://hub.docker.com/
+
+Below are some dockerfile commands you must know: 
+
+FROM The base image for building a new image. This command must be on top of the dockerfile. 
+MAINTAINER Optional, contains the name of the maintainer of the image.. 
+RUN Used to execute a command during the build process of the docker image. 
+ADD Copy a file from the host machine to the new docker image. There is an option to use an URL for the file, docker will then download that file to the destination directory. 
+ENV Define an environment variable. 
+CMD Used for executing commands when we build a new container from the docker image. 
+ENTRYPOINT Define the default command that will be executed when the container is running. 
+WORKDIR This is directive for CMD command to be executed. 
+USER Set the user or UID for the container created with the image. 
+VOLUME Enable access/linked directory between the container and the host machine.
+LABEL 
+
+vi Dockerfile
+
+FROM ubuntu
+MAINTAINER ksp
+RUN apt-get update && apt-get install apache2 -y
+EXPOSE 80
+CMD ["echo", "hello"]
+
+docker build -t myubuntu .
+docker run -it myubuntu
+docker  ps -a
+
+
+vi Dockerfile
+
+#This is first container
+FROM ubuntu:15.04
+MAINTAINER ksp
+RUN rm -rf /tmp/*
+CMD ["/bin/bash"] 
+
+docker build -t myimage2 .
+docker run -it myimage2
+docker ps -a
+
+
+------------------------------------------------------------------------------------------------------------------
+Sep 19, 2019
+------------------------------------------------------------------------------------------------------------------
+
+discussion about training - Sep 16, 17
+
+http://ajoberstar.org/grgit/index.html
+https://github.com/ajoberstar/grgit
+
+https://github.com/Accenture/adop-doa-materials.git
+https://github.com/yash59tc/HelloWolrd.git
+https://github.com/jenkinsci/codesonar-plugin.git
+https://alm.accenture.com/wiki/display/DOT/DevOps+Academy
+spring-petclinic
+
+https://xebialabs.com/periodic-table-of-devops-tools/
+devops.com
+media.accenture.com
+https://awspro.academy/
+https://aws.letsmock.com/wp/
+
+katacoda.com
+https://github.com/katacoda/scenario-examples
+
+------------------------------------------------------------------------------------------------------------------
+Sep 20, 2019
+------------------------------------------------------------------------------------------------------------------
+
+katacoda.com
+udemy course - docker file
+
+------------------------------------------------------------------------------------------------------------------
+Sep 26, 2019
+------------------------------------------------------------------------------------------------------------------
+
+
+sudo mkdir /etc/ansible
+sudo vi /etc/ansible/hosts
+cat /etc/ansible/hosts
+localhost
+
+[ansadmin@ip-172-31-42-242 ~]$ ansible all -m ping
+ [WARNING]: Platform linux on host localhost is using the discovered Python interpreter at /usr/bin/python, but future installation of
+another Python interpreter could change this. See https://docs.ansible.com/ansible/2.8/reference_appendices/interpreter_discovery.html
+for more information.
+
+localhost | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+
+
+ping module
+ansible localhost -m ping
+
+default module is command module
+
+ansible all -m command -a "uname -a"
+ansible all -a "uname -a"
+
+create user:
+
+ansible all -b -m command -a "useradd 123"
+ansible all -m command -a "id 123"
+
+ansible all -b  -a "useradd 789"
+ansible all -a "id 789"
 
 
 
