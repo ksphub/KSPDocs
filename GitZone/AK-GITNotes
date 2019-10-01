@@ -1389,6 +1389,58 @@ ansible all -m command -a "id 123"
 ansible all -b  -a "useradd 789"
 ansible all -a "id 789"
 
+------------------------------------------------------------------------------------------------------------------
+Sep 27, 2019
+------------------------------------------------------------------------------------------------------------------
+
+18.216.154.224 - ak ansible server
+
+adding another server to inventory....
+
+on client.. (18.216.154.224)
+enable password athentication.. in ssh config file
+create user ansadmin 
+sudo access to ansadimn
+
+on ansible server..
+login as ansadmin user
+ssh-copy-id  ansadmin@18.216.154.224
+ssh 18.216.154.224 .. to check connectivity
+
+update inventory in ansible server by adding client ip to inventory
+
+[ansadmin@ip-172-31-42-242 ~]$ cat /etc/ansible/hosts
+localhost
+18.216.154.224
+
+[prodgrp]
+localhost
+
+[devgrp]
+18.216.154.224
+
+[everygrp]
+localhost
+18.216.154.224
+[ansadmin@ip-172-31-42-242 ~]$
+
+
+This module is automatically called by playbooks to gather useful variables about remote hosts that can be used in playbooks.
+
+[ansadmin@ip-172-31-42-242 ~]$ cat 1play.yml
+---
+- name: Getting Started First Playbook
+  hosts: all
+  tasks:
+    - name: Ping Test
+      ping:
+
+
+ansible-playbook --syntax-check 1play.yml
+dryrun...will check later
+
+gathering facts... 
+ansible localhost -m setup 
 
 
 
